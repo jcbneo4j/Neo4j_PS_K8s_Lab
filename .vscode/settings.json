@@ -1,0 +1,7 @@
+{
+    "github.codespaces.defaultExtensions": [
+        
+        "GitHub.codespaces",
+        "GitHub.vscode-pull-request-github"
+    ]
+}
