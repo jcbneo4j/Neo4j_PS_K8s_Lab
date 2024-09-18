@@ -6,6 +6,19 @@ Welcome to the Neo4j Professional Services Kubernetes Lab. In this series of lab
 
 This lab is hosted as a Github Codespace which is self-contained not requiring anything to be run locally on your system. In order to start the lab follow the steps below. 
 
+From the project page of this repository, click on the Code button, select the Codespaces tab, click the ellipsis (...), and select New with options... from the menu:
+
+
+In the next page, select the Branch, Region, and Machine type as shown in the below image and then click the Create codespace button:
+
+
+
+After a few moments, the Codespace will open up in an online VS Code IDE, as shown:
+
+
+
+
+
 ## 3 Node Cluster Deployment
 
 
