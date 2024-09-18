@@ -1,0 +1,36 @@
+neo4j:
+  name: "neo4jcluster"
+  minimumClusterSize: 3
+  resources:
+    cpu: "1"
+    memory: "4Gi"
+  password: "password123"
+  edition: "enterprise"
+  acceptLicenseAgreement: "yes"
+
+volumes:
+  data:
+    mode: "defaultStorageClass"
+ssl:
+# setting per "connector" matching neo4j config
+  bolt:
+    privateKey:
+      secretName: neo4j-tls
+      subPath: tls.key
+    publicCertificate:
+      secretName: neo4j-tls
+      subPath: tls.crt
+  https:
+    privateKey:
+      secretName: neo4j-tls
+      subPath: tls.key
+    publicCertificate:
+      secretName: neo4j-tls
+      subPath: tls.crt
+    trustedCerts:
+      sources:
+      - secret:
+          name: neo4j-tls
+          items:
+          - key: tls.crt
+            path: public.crt
