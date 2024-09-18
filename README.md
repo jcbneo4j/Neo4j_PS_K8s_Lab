@@ -8,13 +8,15 @@ This lab is hosted as a Github Codespace which is self-contained not requiring a
 
 From the project page of this repository, click on the Code button, select the Codespaces tab, click the ellipsis (...), and select New with options... from the menu:
 
+![image](images/new_codespace.png)
 
 In the next page, select the Branch, Region, and Machine type as shown in the below image and then click the Create codespace button:
 
-
+![image](images/create_codespace.png)
 
 After a few moments, the Codespace will open up in an online VS Code IDE, as shown:
 
+![image](images/codespace_ide.png)
 
 
 
