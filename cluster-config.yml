@@ -5,16 +5,6 @@ servers: 3
 kubeAPI:
   hostIP: "0.0.0.0"
   hostPort: "6443"
-ports:
-  - port: 7474:7474
-    nodeFilters:
-      - loadbalancer
-  - port: 7473:7473
-    nodeFilters:
-      - loadbalancer
-  - port: 7687:7687
-    nodeFilters:
-      - loadbalancer
 options:
   k3d:
     wait: true

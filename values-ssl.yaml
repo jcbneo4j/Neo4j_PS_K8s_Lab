@@ -11,8 +11,8 @@ neo4j:
 volumes:
   data:
     mode: "defaultStorageClass"
+
 ssl:
-# setting per "connector" matching neo4j config
   bolt:
     privateKey:
       secretName: neo4j-tls
