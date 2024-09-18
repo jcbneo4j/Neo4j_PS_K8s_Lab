@@ -10,13 +10,17 @@ From the project page of this repository, click on the Code button, select the C
 
 ![image](images/new_codespace.png)
 
+
 In the next page, select the Branch, Region, and Machine type as shown in the below image and then click the Create codespace button:
 
 ![image](images/create_codespace.png)
 
+
 After a few moments, the Codespace will open up in an online VS Code IDE, as shown:
 
 ![image](images/codespace_ide.png)
+
+
 
 
 
@@ -40,6 +44,27 @@ Prior to deploying Neo4j a K8s namespace needs to be created by running the foll
 ```bash
 kubectl create namespace neo4j
 kubectl config set-context --current --namespace=neo4j
+```
+
+Now the cluster can be deployed via helm commands contained in the deploy.sh. These will create a separate "release" for each node in the 3 node cluster - run the script, as follows:
+
+```bash
+./deploy.sh
+```
+
+A few minutes after the deployment you can validate it's running by issuing the following command:
+
+```bash
+kubectl get pods
+```
+
+Once all of the nodes have a STATUS of 'Running' and are READY with 1/1, you can proceed:
+
+```bash
+NAME         READY   STATUS    RESTARTS   AGE
+server-1-0   1/1     Running   0          10m
+server-2-0   1/1     Running   0          10m
+server-3-0   1/1     Running   0          10m
 ```
 
 ## Enable SSL
