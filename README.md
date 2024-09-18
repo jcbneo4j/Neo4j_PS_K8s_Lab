@@ -46,10 +46,12 @@ kubectl create namespace neo4j
 kubectl config set-context --current --namespace=neo4j
 ```
 
-Now the cluster can be deployed via helm commands contained in the deploy.sh. These will create a separate "release" for each node in the 3 node cluster - run the script, as follows:
+Now the cluster can be deployed via helm commands below. These will create a separate "release" for each node in the 3 node cluster. Each node release (e..g deployment) will follow a naming convention of "server-1, server-2, etc":
 
 ```bash
-./deploy.sh
+helm install server-1 neo4j/neo4j --namespace neo4j -f values.yaml
+helm install server-2 neo4j/neo4j --namespace neo4j -f values.yaml
+helm install server-3 neo4j/neo4j --namespace neo4j -f values.yaml
 ```
 
 A few minutes after the deployment you can validate it's running by issuing the following command:
