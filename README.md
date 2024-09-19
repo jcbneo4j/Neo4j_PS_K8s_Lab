@@ -89,7 +89,7 @@ outputs:
 2024-09-18 21:19:25.148+0000 INFO  This instance is ServerId{5e98bcb8} (5e98bcb8-00c9-47da-bf68-c9b44107d490)
 ```
 
-## kubectl exec
+## Accessing the pods
 
 Outside of accessing the Kubernetes cluster via the loadbalaner, one can run the `kubectl exec` command allowing one to effectively shell into the pod and issue commands from within, or alternatively, pass commands into the exec command, as follows:
 
@@ -100,11 +100,12 @@ kubectl exec -it server-1-0 -- bash
 
 One the Return button is pressed, you'll be at the bash prompt of server-1's pod container:
 neo4j@server-1-0:~$
+```
 
 ### cypher-shell (within the pod):
 
 You'll be in the $NEO4J_HOME, so try cypher-shell and the output should be as shown below the command:
-
+```bash
 neo4j@server-1-0:~$ cypher-shell -u neo4j -p password123 -a bolt://localhost:7687
 
 Connected to Neo4j using Bolt protocol version 5.6 at bolt://localhost:7687 as user neo4j.
@@ -112,15 +113,43 @@ Type :help for a list of available commands or :exit to exit the shell.
 Note that Cypher queries must end with a semicolon.
 neo4j@neo4j> 
 ```
-   
-2. This command will "exec" into the pod running on server-1:
+
+### neo4j-admin (within the pod):
+
+From within the pod, run the neo4j-admin command to get the database info:
+
 ```bash
-kubectl exec -it server-1-0 -- cypher-shell -u neo4j -p <password> -a bolt://localhost:7687 -d system
+neo4j@server-1-0:~$ neo4j-admin database info --expand-commands
+
+This outputs the following:
+
+Database name:                neo4j
+Database in use:              true
+Last committed transaction id:-1
+Store needs recovery:         true
+
+Database name:                system
+Database in use:              true
+Last committed transaction id:-1
+Store needs recovery:         true
 
 
+Note: select Ctrl-D to exit from the cypher-shell. This will put you back at the bash shell of the pod. Type "exit" and hit Enter to exit back to local terminal.
 ```
-   
 
+2. This will issue a command into the pod on server-1 via "exec":
+```bash
+kubectl exec -it server-1-0 -- cypher-shell -u neo4j -p password123 -a bolt://localhost:7687 -d system
+
+After hitting Enter on the above command, the output will be shown as:
+
+Connected to Neo4j using Bolt protocol version 5.6 at bolt://localhost:7687 as user neo4j.
+Type :help for a list of available commands or :exit to exit the shell.
+Note that Cypher queries must end with a semicolon.
+neo4j@system> 
+
+Note: select Ctrl-D to exit from the cypher-shell. This will put you back at the bash shell of the pod. Type "exit" and hit Enter to exit back to local terminal.
+```
    
 
 
