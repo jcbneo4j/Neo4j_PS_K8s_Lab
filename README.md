@@ -151,7 +151,55 @@ neo4j@system>
 Note: select Ctrl-D to exit from the cypher-shell. This will put you back at the bash shell of the pod. Type "exit" and hit Enter to exit back to local terminal.
 ```
    
+##Using helm
 
+After the initial deployment, some maintenance can be done via helm. This section is to gain familarity with those proecesses.
+
+1. One command is to do a simple listing of the current deployment. This would list all of the cluster nodes deployed as separate "releases." 
+
+```bash
+helm list
+
+Running the above command results in the following output:
+
+NAME            NAMESPACE       REVISION        UPDATED                                 STATUS          CHART           APP VERSION
+server-1        neo4j           1               2024-09-19 20:02:45.05682444 +0000 UTC  deployed        neo4j-5.23      5.23       
+server-2        neo4j           1               2024-09-19 20:02:46.814830904 +0000 UTC deployed        neo4j-5.23      5.23       
+server-3        neo4j           2               2024-09-19 20:08:15.669412661 +0000 UTC deployed        neo4j-5.23      5.23   
+```
+
+2. Let's say we didn't want to deploy the latest version of Neo4j to the nodes (default behavior of the Neo4j helm charts). We can fix this by running an "upgrade" command passing in the version of Neo4j intended for deployment. After the commands are run for each node, then run the "kubectl get pods" command to ensure they are Running:
+
+```bash
+helm upgrade server-1 neo4j/neo4j --version 5.20.0 --namespace neo4j -f values.yaml
+helm upgrade server-2 neo4j/neo4j --version 5.20.0 --namespace neo4j -f values.yaml
+helm upgrade server-3 neo4j/neo4j --version 5.20.0 --namespace neo4j -f values.yaml
+```
+Then check to ensure pods are running:
+```bash
+kubectl get pods
+```
+Lastly, run the helm list to check that they correct version was deployed:
+```bash
+helm list 
+
+Running the above command results in the following output:
+
+NAME            NAMESPACE       REVISION        UPDATED                                 STATUS          CHART           APP VERSION
+server-1        neo4j           2               2024-09-19 20:20:37.104601266 +0000 UTC deployed        neo4j-5.20.0    5.20.0     
+server-2        neo4j           2               2024-09-19 20:20:23.134574547 +0000 UTC deployed        neo4j-5.20.0    5.20.0     
+server-3        neo4j           4               2024-09-19 20:20:13.178864298 +0000 UTC deployed        neo4j-5.20.0    5.20.0   
+```
+
+3. Uninstall a deployment
+
+The following command will uninstall a deployment (run "helm list" to get a list of deployment names):
+
+```bash
+helm uninstall server-1
+helm uninstall server-2
+helm uninstall server-3
+```
 
 ## Enable SSL
 
