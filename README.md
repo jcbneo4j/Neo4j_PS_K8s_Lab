@@ -25,7 +25,7 @@ This lab is hosted as a Github Codespace which is self-contained not requiring a
 
 
 
-## 3 Node Cluster Deployment
+## Deploy a 3 Node Neo4J Cluster
 
 1. The first step in deploying a Neo4j cluster is to provision the Kubernetes (K8s) nodes via k3d, which is a lightweight K8s package to manage K8s environments. This can done running the following in the terminal. The script will download and install the k3d and configure a 3 node cluster:
 
@@ -89,7 +89,7 @@ outputs:
 2024-09-18 21:19:25.148+0000 INFO  This instance is ServerId{5e98bcb8} (5e98bcb8-00c9-47da-bf68-c9b44107d490)
 ```
 
-## Accessing the pods
+## Accessing Neo4j from within the pods
 
 Outside of accessing the Kubernetes cluster via the loadbalaner, one can run the `kubectl exec` command allowing one to effectively shell into the pod and issue commands from within, or alternatively, pass commands into the exec command, as follows:
 
