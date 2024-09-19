@@ -48,6 +48,26 @@ kubectl config set-context --current --namespace=neo4j
 
 4. Now the cluster can be deployed via helm commands below. These will create a separate "release" for each node in the 3 node cluster. Each node release (e..g deployment) will follow a naming convention of "server-1, server-2, etc". Note: in an enterprise-level deployment, the values.yaml may differ for each node for various reasons - for instance, nodes could deployed to different regions/availability zones in a cloud deployment and the data contained in each nodes values yaml could differ; if that's the case, the values yaml would have a unique name (e.g. values1.yaml):
 
+values yaml for helm:
+
+```yaml
+neo4j:
+  name: "neo4jcluster"
+  minimumClusterSize: 3
+  resources:
+    cpu: "1"
+    memory: "4Gi"
+  password: "password123"
+  edition: "enterprise"
+  acceptLicenseAgreement: "yes"
+
+volumes:
+  data:
+    mode: "defaultStorageClass"
+```
+
+helm deployment commands:
+
 ```bash
 helm install server-1 neo4j/neo4j --namespace neo4j -f values.yaml
 helm install server-2 neo4j/neo4j --namespace neo4j -f values.yaml
@@ -151,7 +171,7 @@ neo4j@system>
 Note: select Ctrl-D to exit from the cypher-shell. This will put you back at the bash shell of the pod. Type "exit" and hit Enter to exit back to local terminal.
 ```
    
-##Using helm
+## Using helm
 
 After the initial deployment, some maintenance can be done via helm. This section is to gain familarity with those proecesses.
 
@@ -203,8 +223,76 @@ helm uninstall server-3
 
 ## Enable SSL
 
+In this step we will redeploy the Neo4j cluster, but this time we'll be doing so to enable SSL for bolt and http(s). 
 
-## Upgrade Neo4j Version
+value yaml for helm deployment
+```yaml
+neo4j:
+  name: "neo4jcluster"
+  minimumClusterSize: 3
+  resources:
+    cpu: "1"
+    memory: "4Gi"
+  password: "password123"
+  edition: "enterprise"
+  acceptLicenseAgreement: "yes"
+
+volumes:
+  data:
+    mode: "defaultStorageClass"
+
+ssl:
+  bolt:
+    privateKey:
+      secretName: neo4j-tls
+      subPath: tls.key
+    publicCertificate:
+      secretName: neo4j-tls
+      subPath: tls.crt
+  https:
+    privateKey:
+      secretName: neo4j-tls
+      subPath: tls.key
+    publicCertificate:
+      secretName: neo4j-tls
+      subPath: tls.crt
+    trustedCerts:
+      sources:
+      - secret:
+          name: neo4j-tls
+          items:
+          - key: tls.crt
+            path: public.crt
+```
+
+1. Create the public cert/private key for a self-signed cert:
+
+```bash
+openssl req -newkey rsa:2048 -nodes -keyout private.key -x509 -days 365 -out public.crt -subj "/C=GB/ST=London/L=London/O=Neo4j/OU=IT Department"
+```
+
+2. Create a K8s secret for the helm chart to reference the key/cert:
+
+```bash
+kubectl create secret tls neo4j-tls --cert=public.crt --key=private.key
+```
+3. Check the secret:
+
+```bash
+#this first command lists all of the secrets
+kubectl get secret
+
+#this command allows you to view the secret's contents
+kubectl get secret neo4j-tls -o yaml
+```
+4. Deploy with ssl and version
+
+```bash
+helm install server-1 neo4j/neo4j --version 5.14.0 --namespace neo4j -f values-ssl.yaml
+helm install server-2 neo4j/neo4j --version 5.14.0 --namespace neo4j -f values-ssl.yaml
+helm install server-3 neo4j/neo4j --version 5.14.0 --namespace neo4j -f values-ssl.yaml
+```
+
 
 
 
