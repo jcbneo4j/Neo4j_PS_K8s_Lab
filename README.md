@@ -293,7 +293,12 @@ helm install server-2 neo4j/neo4j --version 5.14.0 --namespace neo4j -f values-s
 helm install server-3 neo4j/neo4j --version 5.14.0 --namespace neo4j -f values-ssl.yaml
 ```
 
-5. Use cypher shell from kubectl (using bolt+ssc):
+5. Then check to ensure pods are running:
+```bash
+kubectl get pods
+```
+
+6. Use cypher shell from kubectl (using bolt+ssc):
 
 ```bash
 kubectl exec -it server-1-0 -- cypher-shell -u neo4j -p password123 -a bolt+ssc://localhost:7687 -d system
