@@ -46,7 +46,7 @@ kubectl create namespace neo4j
 kubectl config set-context --current --namespace=neo4j
 ```
 
-4. Now the cluster can be deployed via helm commands below. These will create a separate "release" for each node in the 3 node cluster. Each node release (e..g deployment) will follow a naming convention of "server-1, server-2, etc". Note: in an enterprise-level deployment, the values.yaml may differ for each node for various reasons - for instance, nodes could deployed to different regions/availability zones in a cloud deployment and the data contained in each nodes values yaml could differ; if that's the case, the values yaml would have a unique name (e.g. values1.yaml):
+4. Now the cluster can be deployed via helm commands below. These will create a separate "release" for each node in the 3 node cluster. Each node release (e.g. deployment) will follow a naming convention of "server-1, server-2, etc". Note: in an enterprise-level deployment, the values.yaml may differ for each node for various reasons - for instance, nodes could deployed to different regions/availability zones in a cloud deployment and the data contained in each nodes values yaml could differ; if that's the case, the values yaml would have a unique name (e.g. values1.yaml):
 
 values yaml for helm:
 
@@ -69,9 +69,9 @@ volumes:
 helm deployment commands:
 
 ```bash
-helm install server-1 neo4j/neo4j --namespace neo4j -f values.yaml
-helm install server-2 neo4j/neo4j --namespace neo4j -f values.yaml
-helm install server-3 neo4j/neo4j --namespace neo4j -f values.yaml
+helm install server-1 neo4j/neo4j --version 5.14.0 --namespace neo4j -f values.yaml
+helm install server-2 neo4j/neo4j --version 5.14.0 --namespace neo4j -f values.yaml
+helm install server-3 neo4j/neo4j --version 5.14.0 --namespace neo4j -f values.yaml
 ```
 
 5. A few minutes after the deployment you can validate it's running by issuing the following command:
@@ -105,7 +105,7 @@ outputs:
 2024-09-18 21:19:17.300+0000 INFO  Executing external script to retrieve value of setting server.cluster.raft.advertised_address
 2024-09-18 21:19:17.300+0000 INFO  Executing external script to retrieve value of setting server.cluster.advertised_address
 2024-09-18 21:19:17.338+0000 INFO  Starting...
-2024-09-18 21:19:25.098+0000 INFO  ======== Neo4j 5.23.0 ========
+2024-09-18 21:19:25.098+0000 INFO  ======== Neo4j 5.14.0 ========
 2024-09-18 21:19:25.148+0000 INFO  This instance is ServerId{5e98bcb8} (5e98bcb8-00c9-47da-bf68-c9b44107d490)
 ```
 
@@ -157,7 +157,8 @@ Store needs recovery:         true
 Note: select Ctrl-D to exit from the cypher-shell. This will put you back at the bash shell of the pod. Type "exit" and hit Enter to exit back to local terminal.
 ```
 
-2. This will issue a command into the pod on server-1 via "exec":
+2. Alternatively, you can issue a command into the pod on server-1 via "exec" from your terminal:
+3. 
 ```bash
 kubectl exec -it server-1-0 -- cypher-shell -u neo4j -p password123 -a bolt://localhost:7687 -d system
 
@@ -211,14 +212,16 @@ server-2        neo4j           2               2024-09-19 20:20:23.134574547 +0
 server-3        neo4j           4               2024-09-19 20:20:13.178864298 +0000 UTC deployed        neo4j-5.20.0    5.20.0   
 ```
 
-3. Uninstall a deployment
+3. Uninstall a deployment and clean
 
-The following command will uninstall a deployment (run "helm list" to get a list of deployment names):
+The following command will uninstall a deployment (run "helm list" to get a list of deployment names) and uninstall the k3d cluster in prep for the next lab:
 
 ```bash
 helm uninstall server-1
 helm uninstall server-2
 helm uninstall server-3
+
+./clean_all.sh
 ```
 
 ## Enable SSL
