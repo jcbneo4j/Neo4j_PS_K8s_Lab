@@ -25,7 +25,7 @@ This lab is hosted as a Github Codespace which is self-contained not requiring a
 
 
 
-## Deploy a 3 Node Neo4J Cluster
+## First lab: Deploy a 3 Node Neo4J Cluster
 
 1. The first step in deploying a Neo4j cluster is to provision the Kubernetes (K8s) nodes via k3d, which is a lightweight K8s package to manage K8s environments. This can done running the following in the terminal. The script will download and install the k3d and configure a 3 node cluster:
 
@@ -172,7 +172,7 @@ neo4j@system>
 Note: select Ctrl-D to exit from the cypher-shell. This will put you back at the bash shell of the pod. Type "exit" and hit Enter to exit back to local terminal.
 ```
    
-## Using helm
+## Second lab: Using helm to Upgrade Deployment
 
 After the initial deployment, some maintenance can be done via helm. This section is to gain familarity with those proecesses.
 
