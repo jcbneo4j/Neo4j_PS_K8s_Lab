@@ -1,14 +1,16 @@
-apiVersion: k3d.io/v1alpha2
+apiVersion: k3d.io/v1alpha5
 kind: Simple
-name: neo4jcluster
-servers: 3
+metadata:
+  name: neo4jcluster
+servers: 1
+agents: 4
 kubeAPI:
   hostIP: "0.0.0.0"
   hostPort: "6443"
 options:
   k3d:
     wait: true
-    timeout: "60s"
+    timeout: "300s"
   kubeconfig:
     updateDefaultKubeconfig: true
     switchCurrentContext: true
